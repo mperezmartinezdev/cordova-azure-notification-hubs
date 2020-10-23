@@ -56,7 +56,7 @@
   <platform name="ios">
     <config-file target="config.xml" parent="/*">
       <feature name="PushNotification">
-        <param name="ios-package" value="PushPlugin"/>
+        <param name="ios-package" value="PushNotification"/>
       </feature>
     </config-file>
     <config-file target="*-Info.plist" parent="UIBackgroundModes">
@@ -70,10 +70,9 @@
     <config-file target="*-Release.plist" parent="aps-environment">
       <string>production</string>
     </config-file>
-    <source-file src="src/ios/AppDelegate+notification.m"/>
-    <source-file src="src/ios/PushPlugin.m"/>
-    <header-file src="src/ios/AppDelegate+notification.h"/>
-    <header-file src="src/ios/PushPlugin.h"/>
+    <source-file src="src/ios/PushNotification.swift" />
+
+    <dependency id="cordova-plugin-add-swift-support" version="2.0.2"/>
     <framework src="src/ios/WindowsAzureMessaging.framework" custom="true" />
   </platform>
 </plugin>

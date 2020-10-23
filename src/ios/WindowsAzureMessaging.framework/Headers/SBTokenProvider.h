@@ -2,23 +2,28 @@
 //  Copyright (c) Microsoft Corporation. All rights reserved.
 //----------------------------------------------------------------
 
-@interface SBTokenProvider : NSObject{
+#import <Foundation/Foundation.h>
 
-@private
-    NSString* _sharedAccessKey;
-    NSString* _sharedAccessKeyName ;
-    NSString* _sharedSecret;
-    NSString* _sharedSecretIssurer;
-    NSURL* _stsHostName;
-    NSURL* _serviceEndPoint;
+@interface SBTokenProvider : NSObject {
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wobjc-interface-ivars"
+  @private
+    NSString *_sharedAccessKey;
+    NSString *_sharedAccessKeyName;
+    NSString *_sharedSecret;
+    NSString *_sharedSecretIssurer;
+    NSURL *_stsHostName;
+    NSURL *_serviceEndPoint;
 }
 
-@property (nonatomic) NSInteger timeToExpireinMins;
+#pragma GCC diagnostic pop
 
-- (SBTokenProvider*) initWithConnectionDictinary: (NSDictionary*) connectionDictionary;
+@property(nonatomic) NSInteger timeToExpireinMins;
 
-- (void) setTokenWithRequest:(NSMutableURLRequest*)request completion:(void (^)(NSError*))completion;
-- (BOOL) setTokenWithRequest:(NSMutableURLRequest*)request error:(NSError**)error;
+- (SBTokenProvider *)initWithConnectionDictinary:(NSDictionary *)connectionDictionary;
+
+- (void)setTokenWithRequest:(NSMutableURLRequest *)request completion:(void (^)(NSError *))completion;
+- (BOOL)setTokenWithRequest:(NSMutableURLRequest *)request error:(NSError **)error;
 
 @end
-

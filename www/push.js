@@ -63,7 +63,7 @@ var PushNotification = function(options) {
 
     // wait at least one process tick to allow event subscriptions
     setTimeout(function() {
-        exec(success, fail, 'PushNotification', 'init', [options]);
+        exec(success, fail, 'PushNotification', 'run', [options]);
     }, 10);
 };
 
