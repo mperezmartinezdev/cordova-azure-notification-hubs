@@ -50,6 +50,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
 
     private static String notificationHubPath = "";
     private static String connectionString = "";
+    private static String tags = "";
 
     /**
      * Gets the application context from cordova's main activity.
@@ -189,6 +190,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                     try {
                         notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
                         connectionString = data.getJSONObject(0).getString(CONNECTION_STRING);
+                        tags = data.getJSONObject(0).getString(TAGS);
 
                         jo = data.getJSONObject(0).getJSONObject(ANDROID);
 
@@ -213,7 +215,11 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                             if (((regId=sharedPref.getString(AZURE_REG_ID, null)) == null)){
                                 NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
 
-                                regId = hub.register(token).getRegistrationId();
+                                if(tags!=null && tags!="") {
+									regId = hub.register(token,tags).getRegistrationId();
+								}else {
+									regId = hub.register(token).getRegistrationId();	
+								}
 
                                 editor.putString(AZURE_REG_ID, regId);
                                 editor.putString(REGISTRATION_ID, token);
@@ -221,7 +227,11 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                             } else if ((storedToken=sharedPref.getString(REGISTRATION_ID, "")) != token) {
                                 NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
 
-                                regId = hub.register(token).getRegistrationId();
+                                if(tags!=null && tags!="") {
+									regId = hub.register(token,tags).getRegistrationId();
+								}else {
+									regId = hub.register(token).getRegistrationId();	
+								}
 
                                 editor.putString(AZURE_REG_ID, regId);
                                 editor.putString(REGISTRATION_ID, token);

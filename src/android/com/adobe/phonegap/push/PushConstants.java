@@ -3,6 +3,7 @@ package com.adobe.phonegap.push;
 public interface PushConstants {
     public static final String NOTIFICATION_HUB_PATH = "notificationHubPath";
     public static final String CONNECTION_STRING = "connectionString";
+    public static final String TAGS = "tags";
 
     public static final String COM_ADOBE_PHONEGAP_PUSH = "com.adobe.phonegap.push";
     public static final String REGISTRATION_ID = "registrationId";
