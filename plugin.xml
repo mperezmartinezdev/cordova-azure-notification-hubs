@@ -26,6 +26,7 @@
       <uses-permission android:name="android.permission.VIBRATE"/>
     </config-file>
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
+		<uses-library android:name="org.apache.http.legacy" android:required="false" />
       <activity android:name="com.adobe.phonegap.push.PushHandlerActivity" android:exported="true" android:permission="${applicationId}.permission.PushHandlerActivity"/>
       <receiver android:name="com.adobe.phonegap.push.BackgroundActionButtonHandler"/>
       <service android:name="com.adobe.phonegap.push.FCMService">
