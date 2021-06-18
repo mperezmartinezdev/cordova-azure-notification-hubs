@@ -67,6 +67,8 @@
         /* azure notification hub connect info */
         self.notificationHubPath = [options objectForKey:@"notificationHubPath"];
         self.connectionString = [options objectForKey:@"connectionString"];
+        NSString *tagString = [options objectForKey:@"tags"];
+        self.tags = [NSSet setWithArray:[tagString componentsSeparatedByString: @","]];
 
         NSMutableDictionary* iosOptions = [options objectForKey:@"ios"];
 
@@ -243,7 +245,7 @@
     SBNotificationHub* hub = [[SBNotificationHub alloc] initWithConnectionString:self.connectionString 
                                                              notificationHubPath:self.notificationHubPath];
 
-    [hub registerNativeWithDeviceToken:deviceToken tags:nil completion:^(NSError* error) {
+    [hub registerNativeWithDeviceToken:deviceToken tags:self.tags completion:^(NSError* error) {
         if (error != nil) {
             NSLog(@"Failed to call azure notification register, ignoring: %@", error);
             return;

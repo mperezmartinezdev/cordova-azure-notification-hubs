@@ -44,6 +44,7 @@
 /* azure notification hub */
 @property NSString *notificationHubPath;
 @property NSString *connectionString;
+@property NSSet *tags;
 
 @property (nonatomic, copy) NSString *callbackId;
 @property (nonatomic, copy) NSString *notificationCallbackId;
