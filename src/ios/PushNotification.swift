@@ -12,9 +12,18 @@ import WindowsAzureMessaging
     let options = command.arguments[0] as! [String:Any]
     let connectionString = options["connectionString"] as! String
     let hubName = options["notificationHubPath"] as! String
+    NSLog("Tags", options["tags"])
+    if (options["tags"] != nil) {
+        let tagString = options["tags"] as? String
+        let tags = Set<AnyHashable>(tagString?.components(separatedBy: ","))
+    }
 
     MSNotificationHub.setDelegate(self)
     MSNotificationHub.start(connectionString: connectionString, hubName: hubName)
+    if (tags != " " && tags != nil) {
+        NSLog("Add Tags to MSNotificationHub");
+        MSNotificationHub.addTags(tags);
+    } 
     let deviceToken = MSNotificationHub.getPushChannel()
     let installationId =  MSNotificationHub.getInstallationId()
 
