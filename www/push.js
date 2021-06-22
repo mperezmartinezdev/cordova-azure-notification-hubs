@@ -132,7 +132,7 @@ PushNotification.prototype.addTags = function (
   errorCallback,
   options
 ) {
-  // console.log('trigger: addTags');
+  console.log('trigger: addTags');
 
   // if (!errorCallback) {
   //   errorCallback = function () {};
@@ -152,13 +152,9 @@ PushNotification.prototype.addTags = function (
   //   return;
   // }
 
-  exec(
-    function (win) {},
-    function (err) {},
-    'PushNotification',
-    'addTags',
-    [options]
-  );
+  exec(successCallback, errorCallback, 'PushNotification', 'addTags', [
+    options,
+  ]);
 };
 
 PushNotification.prototype.removeTag = function (

@@ -47,6 +47,7 @@ public interface PushConstants {
     public static final String SUBSCRIBE = "subscribe";
     public static final String UNSUBSCRIBE = "unsubscribe";
     public static final String UNREGISTER = "unregister";
+    public static final String ADDTAGS = "addTags";
     public static final String EXIT = "exit";
     public static final String FINISH = "finish";
     public static final String HAS_PERMISSION = "hasPermission";

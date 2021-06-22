@@ -341,6 +341,27 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                     }
                 }
             });
+        } else if (ADDTAGS.equals(action)) {
+            cordova.getThreadPool().execute(new Runnable() {
+                public void run() {
+                    try {
+                        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
+                        
+                        NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
+                        hub.addTags();
+
+                        Log.v(LOG_TAG, "ADDTAGS");
+
+                        callbackContext.success();
+                    } catch (IOException e) {
+                        Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
+                        callbackContext.error(e.getMessage());
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "execute: Got General Exception " + e.getMessage());
+                        callbackContext.error(e.getMessage());
+                    }
+                }
+            });
         } else if (FINISH.equals(action)) {
             callbackContext.success();
         } else if (HAS_PERMISSION.equals(action)) {
