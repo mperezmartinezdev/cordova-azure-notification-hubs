@@ -168,14 +168,14 @@ PushNotification.prototype.removeTag = function (
 
   if (typeof errorCallback !== 'function') {
     console.log(
-      'PushNotification.removeTags failure: failure parameter not a function'
+      'PushNotification.removeTag failure: failure parameter not a function'
     );
     return;
   }
 
   if (typeof successCallback !== 'function') {
     console.log(
-      'PushNotification.removeTags failure: success callback parameter must be a function'
+      'PushNotification.removeTag failure: success callback parameter must be a function'
     );
     return;
   }

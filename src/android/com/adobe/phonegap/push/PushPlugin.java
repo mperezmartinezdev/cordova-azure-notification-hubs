@@ -36,7 +36,6 @@ import java.util.List;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
 import com.microsoft.windowsazure.messaging.NotificationHub;
-
 public class PushPlugin extends CordovaPlugin implements PushConstants {
 
     public static final String LOG_TAG = "Push_Plugin";
@@ -51,6 +50,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
     private static String notificationHubPath = "";
     private static String connectionString = "";
     private static String tags = "";
+    private static String tag = "";
 
     /**
      * Gets the application context from cordova's main activity.
@@ -211,14 +211,14 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
 
                         if (!"".equals(token)) {
                             SharedPreferences.Editor editor = sharedPref.edit();
-                            
+
                             if (((regId=sharedPref.getString(AZURE_REG_ID, null)) == null)){
                                 NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
 
                                 if(tags!=null && tags!="") {
 									regId = hub.register(token,tags).getRegistrationId();
 								}else {
-									regId = hub.register(token).getRegistrationId();	
+									regId = hub.register(token).getRegistrationId();
 								}
 
                                 editor.putString(AZURE_REG_ID, regId);
@@ -230,7 +230,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                                 if(tags!=null && tags!="") {
 									regId = hub.register(token,tags).getRegistrationId();
 								}else {
-									regId = hub.register(token).getRegistrationId();	
+									regId = hub.register(token).getRegistrationId();
 								}
 
                                 editor.putString(AZURE_REG_ID, regId);
@@ -310,7 +310,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                 public void run() {
                     try {
                         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
-                        
+
                         NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
                         hub.unregister();
 
@@ -318,7 +318,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                         editor.remove(AZURE_REG_ID);
                         editor.remove(REGISTRATION_ID);
                         editor.commit();
-                        
+
                         FirebaseInstanceId.getInstance().deleteInstanceId();
                         Log.v(LOG_TAG, "UNREGISTER");
 
@@ -350,9 +350,17 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                         notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
                         connectionString = data.getJSONObject(0).getString(CONNECTION_STRING);
                         tags = data.getJSONObject(0).getString(TAGS);
-                        
+
+                        String token = FirebaseInstanceId.getInstance().getToken();
+
+                        String senderID = getStringResourceByName(GCM_DEFAULT_SENDER_ID);
+
+                        if (token == null) {
+                          token = FirebaseInstanceId.getInstance().getToken(senderID,FCM);
+                        }
+
                         NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
-                        hub.addTags(tags);
+                        hub.register(token,tags);
 
                         Log.v(LOG_TAG, "ADDTAGS");
 
@@ -375,9 +383,17 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                         notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
                         connectionString = data.getJSONObject(0).getString(CONNECTION_STRING);
                         tag = data.getJSONObject(0).getString(TAG);
-                        
+
+                        String token = FirebaseInstanceId.getInstance().getToken();
+
+                        String senderID = getStringResourceByName(GCM_DEFAULT_SENDER_ID);
+
+                        if (token == null) {
+                          token = FirebaseInstanceId.getInstance().getToken(senderID,FCM);
+                        }
+
                         NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
-                        hub.removeTag(tag);
+                        hub.unregister(token,tag);
 
                         Log.v(LOG_TAG, "REMOVETAG");
 
