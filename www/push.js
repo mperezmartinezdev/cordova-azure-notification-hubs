@@ -149,14 +149,10 @@ PushNotification.prototype.addTags = function (
     );
     return;
   }
-
-  exec(
-    cleanHandlersAndPassThrough,
-    errorCallback,
-    'PushNotification',
-    'addTags',
-    [options]
-  );
+  console.log('trigger: addTags');
+  exec(successCallback, errorCallback, 'PushNotification', 'addTags', [
+    options,
+  ]);
 };
 
 PushNotification.prototype.removeTag = function (
@@ -182,13 +178,9 @@ PushNotification.prototype.removeTag = function (
     return;
   }
 
-  exec(
-    cleanHandlersAndPassThrough,
-    errorCallback,
-    'PushNotification',
-    'removeTag',
-    [options]
-  );
+  exec(successCallback, errorCallback, 'PushNotification', 'removeTag', [
+    options,
+  ]);
 };
 
 /**

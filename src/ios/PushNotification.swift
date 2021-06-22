@@ -65,7 +65,7 @@ import WindowsAzureMessaging
             let pushSelf:PushNotification = self
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 let pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR, messageAs: "Error - register device for push first");
-                NSLog("Error registering push device")
+                NSLog("Error - register device for push first")
                 pushSelf.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
             }
         }
@@ -95,7 +95,7 @@ import WindowsAzureMessaging
             let pushSelf:PushNotification = self
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 let pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR, messageAs: "Error - register device for push first");
-                NSLog("Error registering push device")
+                NSLog("Error - register device for push first")
                 pushSelf.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
             }
         }
