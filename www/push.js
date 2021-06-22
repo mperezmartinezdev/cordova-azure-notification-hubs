@@ -159,7 +159,7 @@ PushNotification.prototype.addTags = function (
   );
 };
 
-PushNotification.prototype.removeTags = function (
+PushNotification.prototype.removeTag = function (
   successCallback,
   errorCallback,
   options
@@ -186,7 +186,7 @@ PushNotification.prototype.removeTags = function (
     cleanHandlersAndPassThrough,
     errorCallback,
     'PushNotification',
-    'removeTags',
+    'removeTag',
     [options]
   );
 };
