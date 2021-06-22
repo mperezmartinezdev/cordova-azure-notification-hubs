@@ -134,23 +134,23 @@ PushNotification.prototype.addTags = function (
 ) {
   console.log('trigger: addTags');
 
-  // if (!errorCallback) {
-  //   errorCallback = function () {};
-  // }
+  if (!errorCallback) {
+    errorCallback = function () {};
+  }
 
-  // if (typeof errorCallback !== 'function') {
-  //   console.log(
-  //     'PushNotification.addTags failure: failure parameter not a function'
-  //   );
-  //   return;
-  // }
+  if (typeof errorCallback !== 'function') {
+    console.log(
+      'PushNotification.addTags failure: failure parameter not a function'
+    );
+    return;
+  }
 
-  // if (typeof successCallback !== 'function') {
-  //   console.log(
-  //     'PushNotification.addTags failure: success callback parameter must be a function'
-  //   );
-  //   return;
-  // }
+  if (typeof successCallback !== 'function') {
+    console.log(
+      'PushNotification.addTags failure: success callback parameter must be a function'
+    );
+    return;
+  }
 
   exec(successCallback, errorCallback, 'PushNotification', 'addTags', [
     options,
