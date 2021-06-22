@@ -346,9 +346,13 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                 public void run() {
                     try {
                         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
+
+                        notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
+                        connectionString = data.getJSONObject(0).getString(CONNECTION_STRING);
+                        tags = data.getJSONObject(0).getString(TAGS);
                         
                         NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
-                        hub.addTags();
+                        hub.addTags(tags);
 
                         Log.v(LOG_TAG, "ADDTAGS");
 
@@ -362,7 +366,33 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                     }
                 }
             });
-        } else if (FINISH.equals(action)) {
+        } else if (REMOVETAG.equals(action)) {
+            cordova.getThreadPool().execute(new Runnable() {
+                public void run() {
+                    try {
+                        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
+
+                        notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
+                        connectionString = data.getJSONObject(0).getString(CONNECTION_STRING);
+                        tag = data.getJSONObject(0).getString(TAG);
+                        
+                        NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
+                        hub.removeTag(tag);
+
+                        Log.v(LOG_TAG, "REMOVETAG");
+
+                        callbackContext.success();
+                    } catch (IOException e) {
+                        Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
+                        callbackContext.error(e.getMessage());
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "execute: Got General Exception " + e.getMessage());
+                        callbackContext.error(e.getMessage());
+                    }
+                }
+            });
+        }
+         else if (FINISH.equals(action)) {
             callbackContext.success();
         } else if (HAS_PERMISSION.equals(action)) {
             cordova.getThreadPool().execute(new Runnable() {

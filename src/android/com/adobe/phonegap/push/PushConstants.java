@@ -4,6 +4,7 @@ public interface PushConstants {
     public static final String NOTIFICATION_HUB_PATH = "notificationHubPath";
     public static final String CONNECTION_STRING = "connectionString";
     public static final String TAGS = "tags";
+    public static final String TAG = "tag";
 
     public static final String COM_ADOBE_PHONEGAP_PUSH = "com.adobe.phonegap.push";
     public static final String REGISTRATION_ID = "registrationId";
@@ -48,6 +49,7 @@ public interface PushConstants {
     public static final String UNSUBSCRIBE = "unsubscribe";
     public static final String UNREGISTER = "unregister";
     public static final String ADDTAGS = "addTags";
+    public static final String REMOVETAG = "removeTag";
     public static final String EXIT = "exit";
     public static final String FINISH = "finish";
     public static final String HAS_PERMISSION = "hasPermission";

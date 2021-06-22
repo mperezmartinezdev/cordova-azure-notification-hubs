@@ -73,7 +73,7 @@ import WindowsAzureMessaging
             NSLog("Add Tags to MSNotificationHub");
             MSNotificationHub.addTags(tags);
             
-            let result: [String:String] = ["Tags ":tags," got added"]
+            let result: [String:String] = ["Tags added": tags.joined(separator:"-")]
             let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result);
             self.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
         }
@@ -102,7 +102,7 @@ import WindowsAzureMessaging
         else {
             NSLog("Remove Tag to MSNotificationHub");
             MSNotificationHub.removeTag(tag);
-            let result: [String:String] = ["Tag ":tag," got removed"]
+            let result: [String:String] = ["Tag got removed":tag]
             let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result);
             self.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
         }
