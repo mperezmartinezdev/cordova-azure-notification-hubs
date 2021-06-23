@@ -2,6 +2,7 @@ package com.adobe.phonegap.push;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ContentResolver;
@@ -12,6 +13,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.core.app.NotificationCompat;
+
+import android.util.JsonReader;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -35,7 +38,10 @@ import java.util.List;
 
 import me.leolin.shortcutbadger.ShortcutBadger;
 
-import com.microsoft.windowsazure.messaging.NotificationHub;
+import com.microsoft.windowsazure.messaging.Registration;
+import com.microsoft.windowsazure.messaging.notificationhubs.NotificationHub;
+
+
 public class PushPlugin extends CordovaPlugin implements PushConstants {
 
     public static final String LOG_TAG = "Push_Plugin";
@@ -49,7 +55,8 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
 
     private static String notificationHubPath = "";
     private static String connectionString = "";
-    private static String tags = "";
+    private static List<String> tags = Collections.synchronizedList(new ArrayList<String>());
+    private static JSONArray tagsJSON;
     private static String tag = "";
 
     /**
@@ -190,7 +197,6 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                     try {
                         notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
                         connectionString = data.getJSONObject(0).getString(CONNECTION_STRING);
-                        tags = data.getJSONObject(0).getString(TAGS);
 
                         jo = data.getJSONObject(0).getJSONObject(ANDROID);
 
@@ -213,25 +219,29 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                             SharedPreferences.Editor editor = sharedPref.edit();
 
                             if (((regId=sharedPref.getString(AZURE_REG_ID, null)) == null)){
-                                NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
+                                NotificationHub.start(getApplication(),notificationHubPath, connectionString);
 
-                                if(tags!=null && tags!="") {
-									regId = hub.register(token,tags).getRegistrationId();
-								}else {
-									regId = hub.register(token).getRegistrationId();
-								}
+                                //if(tags!=null && tags!="") {
+                                //  regId = hub.register(token,tags).getRegistrationId();
+                                //}else {
+                                //  regId = hub.register(token).getRegistrationId();
+                                //}
+
+                                regId = NotificationHub.getInstallationId();
 
                                 editor.putString(AZURE_REG_ID, regId);
                                 editor.putString(REGISTRATION_ID, token);
                                 editor.commit();
                             } else if ((storedToken=sharedPref.getString(REGISTRATION_ID, "")) != token) {
-                                NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
+                                //NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
+                                NotificationHub.start(getApplication(),notificationHubPath, connectionString);
 
-                                if(tags!=null && tags!="") {
-									regId = hub.register(token,tags).getRegistrationId();
-								}else {
-									regId = hub.register(token).getRegistrationId();
-								}
+                                //if(tags!=null && tags!="") {
+                                //regId = hub.register(token,tags).getRegistrationId();
+                                //}else {
+                                //regId = hub.register(token).getRegistrationId();
+                                //}
+                                regId = NotificationHub.getInstallationId();
 
                                 editor.putString(AZURE_REG_ID, regId);
                                 editor.putString(REGISTRATION_ID, token);
@@ -311,8 +321,9 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                     try {
                         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
 
-                        NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
-                        hub.unregister();
+                        //NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
+                        NotificationHub.start(getApplication(),notificationHubPath, connectionString);
+                        //NotificationHub.unregister();
 
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.remove(AZURE_REG_ID);
@@ -349,7 +360,14 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
 
                         notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
                         connectionString = data.getJSONObject(0).getString(CONNECTION_STRING);
-                        tags = data.getJSONObject(0).getString(TAGS);
+                        tagsJSON = data.getJSONObject(0).getJSONArray(TAGS);
+
+                        if (tagsJSON != null) {
+                          int len = tagsJSON.length();
+                          for (int i=0;i<len;i++){
+                            tags.add(tagsJSON.get(i).toString());
+                          }
+                        }
 
                         String token = FirebaseInstanceId.getInstance().getToken();
 
@@ -359,8 +377,12 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                           token = FirebaseInstanceId.getInstance().getToken(senderID,FCM);
                         }
 
-                        NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
-                        hub.register(token,tags);
+                        //NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
+                        //hub.register(token,tags);
+
+                        NotificationHub.start(getApplication(),notificationHubPath, connectionString);
+                        NotificationHub.addTags(tags);
+
 
                         Log.v(LOG_TAG, "ADDTAGS");
 
@@ -392,8 +414,10 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                           token = FirebaseInstanceId.getInstance().getToken(senderID,FCM);
                         }
 
-                        NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
-                        hub.unregister(token,tag);
+                        //NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
+                        NotificationHub.start(getApplication(),notificationHubPath, connectionString);
+                        NotificationHub.removeTag(tag);
+
 
                         Log.v(LOG_TAG, "REMOVETAG");
 
@@ -621,6 +645,12 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
         int resId = activity.getResources().getIdentifier(aString, "string", packageName);
         return activity.getString(resId);
     }
+
+    private Application getApplication() {
+        Activity activity = cordova.getActivity();
+        return activity.getApplication();
+    }
+
 
     public static boolean isInForeground() {
       return gForeground;
