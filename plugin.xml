@@ -43,6 +43,7 @@
     <framework src="com.android.support:support-v13:27.+"/>
     <framework src="me.leolin:ShortcutBadger:1.1.21@aar"/>
     <framework src="com.google.firebase:firebase-messaging:17.0.+"/>
+    <framework src="com.microsoft.azure:notification-hubs-android-sdk:1.1.+"/>
     <dependency id="cordova-support-google-services" version="~1.2.0"/>
     <dependency id="phonegap-plugin-multidex" version="~1.0.0"/>
     <source-file src="src/android/com/adobe/phonegap/push/FCMService.java" target-dir="src/com/adobe/phonegap/push/"/>
@@ -53,7 +54,7 @@
     <source-file src="src/android/com/adobe/phonegap/push/PermissionUtils.java" target-dir="src/com/adobe/phonegap/push/"/>
     <source-file src="src/android/com/adobe/phonegap/push/BackgroundActionButtonHandler.java" target-dir="src/com/adobe/phonegap/push/"/>
     <!-- <lib-file src="src/android/notification-hubs-android-sdk-0.4.jar" /> -->
-    <lib-file src="src/android/notification-hubs-android-sdk-1.1.4.jar" />
+    <!-- <lib-file src="src/android/notification-hubs-android-sdk-1.1.4.jar" /> -->
     <lib-file src="src/android/google-volley-1.2.jar" />
   </platform>
   <platform name="ios">
