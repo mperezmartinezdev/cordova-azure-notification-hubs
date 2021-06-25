@@ -1,5 +1,6 @@
 import Cordova
 import Cordova
+import Cordova
 import Foundation
 import WindowsAzureMessaging
 
@@ -103,6 +104,42 @@ import WindowsAzureMessaging
             NSLog("Remove Tag to MSNotificationHub");
             MSNotificationHub.removeTag(tag);
             let result: [String:String] = ["Tag got removed":tag]
+            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result);
+            self.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+        }
+        
+        /*
+         * Always assume that the plugin will fail.
+         * Even if in this example, it can't.
+         */
+        
+        // Send the function result back to Cordova.
+        
+    }
+    
+    
+    @objc(getTags:) // Declare your function name.
+    func getTags(command: CDVInvokedUrlCommand) { // write the function code.
+        let options = command.arguments[0] as! [String:Any]
+        let connectionString = options["connectionString"] as! String
+        let hubName = options["notificationHubPath"] as! String
+        
+        MSNotificationHub.setDelegate(self)
+        MSNotificationHub.start(connectionString: connectionString, hubName: hubName)
+        let deviceToken = MSNotificationHub.getPushChannel()
+        let installationId =  MSNotificationHub.getInstallationId()
+        
+        if(installationId.isEmpty || deviceToken.isEmpty) {
+            let pushSelf:PushNotification = self
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                let pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR, messageAs: "Error - register device for push first");
+                NSLog("Error - register device for push first")
+                pushSelf.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+            }
+        }
+        else {
+            NSLog("Get Tags to MSNotificationHub");
+            let result: [String: [String]] = ["tags":MSNotificationHub.getTags()];
             let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result);
             self.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
         }

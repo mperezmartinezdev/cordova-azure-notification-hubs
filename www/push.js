@@ -185,6 +185,34 @@ PushNotification.prototype.removeTag = function (
   ]);
 };
 
+PushNotification.prototype.getTags = function (
+  successCallback,
+  errorCallback,
+  options
+) {
+  if (!errorCallback) {
+    errorCallback = function () {};
+  }
+
+  if (typeof errorCallback !== 'function') {
+    console.log(
+      'PushNotification.getTags failure: failure parameter not a function'
+    );
+    return;
+  }
+
+  if (typeof successCallback !== 'function') {
+    console.log(
+      'PushNotification.getTags failure: success callback parameter must be a function'
+    );
+    return;
+  }
+
+  exec(successCallback, errorCallback, 'PushNotification', 'getTags', [
+    options,
+  ]);
+};
+
 /**
  * Call this to set the application icon badge
  */
