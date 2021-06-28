@@ -431,7 +431,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                     }
                 }
             });
-        } else if (GETTAGS.equals(action)) {
+         } else if (GETTAGS.equals(action)) {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     try {
@@ -439,8 +439,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
 
                         notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
                         connectionString = data.getJSONObject(0).getString(CONNECTION_STRING);
-                        tag = data.getJSONObject(0).getString(TAG);
-
+                
                         String token = FirebaseInstanceId.getInstance().getToken();
 
                         String senderID = getStringResourceByName(GCM_DEFAULT_SENDER_ID);
