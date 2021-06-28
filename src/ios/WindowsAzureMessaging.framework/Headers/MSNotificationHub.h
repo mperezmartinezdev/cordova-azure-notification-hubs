@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * The Azure Notification Hubs service
  */
-@interface @implementation MSNotificationHub : NSObject
+@interface MSNotificationHub : NSObject
 
 /**
  * Initializes the Notification Hub with the connection string from the Access
