@@ -439,7 +439,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
 
                         notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
                         connectionString = data.getJSONObject(0).getString(CONNECTION_STRING);
-                
+
                         String token = FirebaseInstanceId.getInstance().getToken();
 
                         String senderID = getStringResourceByName(GCM_DEFAULT_SENDER_ID);
@@ -450,11 +450,13 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
 
                         //NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
                         NotificationHub.start(getApplication(),notificationHubPath, connectionString);
-                        NotificationHub.getTags();
 
-                        Log.v(LOG_TAG, "REMOVETAG");
+                        JSONObject json = new JSONObject();
+                        json.put(TAGS, NotificationHub.getTags());
 
-                        callbackContext.success();
+                        Log.v(LOG_TAG, "getTags: " + json.toString());
+
+                        PushPlugin.sendEvent( json );
                     } catch (IOException e) {
                         Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
                         callbackContext.error(e.getMessage());
