@@ -435,6 +435,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     try {
+                        pushContext = callbackContext;
                         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
 
                         notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
@@ -451,19 +452,20 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                         //NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
                         NotificationHub.start(getApplication(),notificationHubPath, connectionString);
 
-                        // Iterable<String> userTags = NotificationHub.getTags();
-                        // ArrayList<String> result = new ArrayList<String>();
-                        // for (String userTag : userTags) {
-                        //   result.add(userTag);
-                        // }
+                        Iterable<String> userTags = NotificationHub.getTags();
+                        JSONArray result = new JSONArray();
+                        for (String userTag : userTags) {
+                            result.put(userTag);
+                        }
 
                         JSONObject json = new JSONObject();
-                        json.put(TAGS, NotificationHub.getTags());
+                        json.put(TAGS, result);
+
 
                         Log.v(LOG_TAG, "getTags: " + json.toString());
 
-                        //PushPlugin.sendEvent( json );
-                        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, json));
+                        PushPlugin.sendEvent( json );
+                        // callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, json));
                     } catch (IOException e) {
                         Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
                         callbackContext.error(e.getMessage());
