@@ -451,12 +451,19 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                         //NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
                         NotificationHub.start(getApplication(),notificationHubPath, connectionString);
 
+                        // Iterable<String> userTags = NotificationHub.getTags();
+                        // ArrayList<String> result = new ArrayList<String>();
+                        // for (String userTag : userTags) {
+                        //   result.add(userTag);
+                        // }
+
                         JSONObject json = new JSONObject();
                         json.put(TAGS, NotificationHub.getTags());
 
                         Log.v(LOG_TAG, "getTags: " + json.toString());
 
-                        PushPlugin.sendEvent( json );
+                        //PushPlugin.sendEvent( json );
+                        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, json));
                     } catch (IOException e) {
                         Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
                         callbackContext.error(e.getMessage());
