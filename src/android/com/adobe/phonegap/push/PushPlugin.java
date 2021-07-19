@@ -435,7 +435,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     try {
-                        pushContext = callbackContext;
+                        //pushContext = callbackContext;
                         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
 
                         notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
@@ -464,8 +464,8 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
 
                         Log.v(LOG_TAG, "getTags: " + json.toString());
 
-                        PushPlugin.sendEvent( json );
-                        // callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, json));
+                        //PushPlugin.sendEvent( json );
+                        callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, json));
                     } catch (IOException e) {
                         Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
                         callbackContext.error(e.getMessage());
