@@ -55,9 +55,6 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
 
     private static String notificationHubPath = "";
     private static String connectionString = "";
-    private static List<String> tags = Collections.synchronizedList(new ArrayList<String>());
-    private static JSONArray tagsJSON;
-    private static String tag = "";
 
     /**
      * Gets the application context from cordova's main activity.
@@ -356,11 +353,15 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     try {
+                        private static List<String> tags = Collections.synchronizedList(new ArrayList<String>());
+                        private static JSONArray tagsJSON;
+
                         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
 
                         notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
                         connectionString = data.getJSONObject(0).getString(CONNECTION_STRING);
                         tagsJSON = data.getJSONObject(0).getJSONArray(TAGS);
+                        
 
                         if (tagsJSON != null) {
                           int len = tagsJSON.length();
@@ -401,6 +402,7 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                 public void run() {
                     try {
                         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
+                        private static String tag = "";
 
                         notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
                         connectionString = data.getJSONObject(0).getString(CONNECTION_STRING);
@@ -416,12 +418,13 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
 
                         //NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
                         NotificationHub.start(getApplication(),notificationHubPath, connectionString);
-                        NotificationHub.removeTag(tag);
-
-
-                        Log.v(LOG_TAG, "REMOVETAG");
-
-                        callbackContext.success();
+                        if (NotificationHub.removeTag(tag)) {
+                            Log.v(LOG_TAG, "REMOVETAG was successfull called and executed");
+                            callbackContext.success();
+                        } else {
+                            Log.v(LOG_TAG, "REMOVETAG failed");
+                            callbackContext.error("removeTag failed with response 'false'");
+                        }
                     } catch (IOException e) {
                         Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
                         callbackContext.error(e.getMessage());
