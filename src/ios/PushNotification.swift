@@ -72,11 +72,15 @@ import WindowsAzureMessaging
         }
         else {
             NSLog("Add Tags to MSNotificationHub");
-            MSNotificationHub.addTags(tags);
-            
-            let result: [String:String] = ["Tags added": tags.joined(separator:"-")]
-            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result);
-            self.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+            if (MSNotificationHub.addTags(tags)) {
+                let result: [String:String] = ["Tags added": tags.joined(separator:"-")]
+                let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result);
+                self.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+            } else {
+                let pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR, messageAs: "Error at addTags - Tags could not be added");
+                NSLog("Error at addTags - Tags could not be added")
+                pushSelf.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+            }
         }
     }
     
@@ -102,10 +106,15 @@ import WindowsAzureMessaging
         }
         else {
             NSLog("Remove Tag to MSNotificationHub");
-            MSNotificationHub.removeTag(tag);
-            let result: [String:String] = ["Tag got removed":tag]
-            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result);
-            self.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+            if (MSNotificationHub.removeTag(tag)) {
+                let result: [String:String] = ["Tag got removed":tag]
+                let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result);
+                self.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+            } else {
+                let pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR, messageAs: "Error at removeTag - Tag could not be removed");
+                NSLog("Error at removeTag - Tag could not be removed")
+                pushSelf.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+            }
         }
         
         /*
