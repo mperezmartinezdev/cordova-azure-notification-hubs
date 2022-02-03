@@ -65,21 +65,21 @@ import WindowsAzureMessaging
         if(installationId.isEmpty || deviceToken.isEmpty) {
             let pushSelf:PushNotification = self
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                let pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR, messageAs: "Error - register device for push first");
+                let pluginResult1 = CDVPluginResult (status: CDVCommandStatus_ERROR, messageAs: "Error - register device for push first");
                 NSLog("Error - register device for push first")
-                pushSelf.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+                pushSelf.commandDelegate!.send(pluginResult1, callbackId: command.callbackId);
             }
         }
         else {
             NSLog("Add Tags to MSNotificationHub");
             if (MSNotificationHub.addTags(tags)) {
                 let result: [String:String] = ["Tags added": tags.joined(separator:"-")]
-                let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result);
-                self.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+                let pluginResult2 = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result);
+                self.commandDelegate!.send(pluginResult2, callbackId: command.callbackId);
             } else {
-                let pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR, messageAs: "Error at addTags - Tags could not be added");
+                let pluginResult3 = CDVPluginResult (status: CDVCommandStatus_ERROR, messageAs: "Error at addTags - Tags could not be added");
                 NSLog("Error at addTags - Tags could not be added")
-                pushSelf.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+                self.commandDelegate!.send(pluginResult3, callbackId: command.callbackId);
             }
         }
     }
@@ -99,21 +99,21 @@ import WindowsAzureMessaging
         if(installationId.isEmpty || deviceToken.isEmpty) {
             let pushSelf:PushNotification = self
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                let pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR, messageAs: "Error - register device for push first");
+                let pluginResult1 = CDVPluginResult (status: CDVCommandStatus_ERROR, messageAs: "Error - register device for push first");
                 NSLog("Error - register device for push first")
-                pushSelf.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+                pushSelf.commandDelegate!.send(pluginResult1, callbackId: command.callbackId);
             }
         }
         else {
             NSLog("Remove Tag to MSNotificationHub");
             if (MSNotificationHub.removeTag(tag)) {
                 let result: [String:String] = ["Tag got removed":tag]
-                let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result);
-                self.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+                let pluginResult2 = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result);
+                self.commandDelegate!.send(pluginResult2, callbackId: command.callbackId);
             } else {
-                let pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR, messageAs: "Error at removeTag - Tag could not be removed");
+                let pluginResult3 = CDVPluginResult (status: CDVCommandStatus_ERROR, messageAs: "Error at removeTag - Tag could not be removed");
                 NSLog("Error at removeTag - Tag could not be removed")
-                pushSelf.commandDelegate!.send(pluginResult, callbackId: command.callbackId);
+                self.commandDelegate!.send(pluginResult3, callbackId: command.callbackId);
             }
         }
         
