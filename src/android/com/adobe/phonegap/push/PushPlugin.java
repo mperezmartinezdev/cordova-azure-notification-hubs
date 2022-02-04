@@ -389,10 +389,6 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                             Log.v(LOG_TAG, "ADDTAGS failed");
                             callbackContext.error("removeTag failed with response 'false'");
                         }
-
-                        Log.v(LOG_TAG, "ADDTAGS");
-
-                        callbackContext.success();
                     } catch (IOException e) {
                         Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
                         callbackContext.error(e.getMessage());
@@ -479,9 +475,6 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                             Log.v(LOG_TAG, "REMOVETAGS failed");
                             callbackContext.error("removeTags failed with response 'false'");
                         }
-                        Log.v(LOG_TAG, "REMOVETAGS");
-
-                        callbackContext.success();
                     } catch (IOException e) {
                         Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
                         callbackContext.error(e.getMessage());
