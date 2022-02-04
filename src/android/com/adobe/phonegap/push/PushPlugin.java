@@ -382,8 +382,13 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                         //hub.register(token,tags);
 
                         NotificationHub.start(getApplication(),notificationHubPath, connectionString);
-                        NotificationHub.addTags(tags);
-
+                        if (NotificationHub.addTags(tags)) {
+                            Log.v(LOG_TAG, "ADDTAGS was successfull called and executed");
+                            callbackContext.success();
+                        } else {
+                            Log.v(LOG_TAG, "ADDTAGS failed");
+                            callbackContext.error("removeTag failed with response 'false'");
+                        }
 
                         Log.v(LOG_TAG, "ADDTAGS");
 
@@ -434,7 +439,59 @@ public class PushPlugin extends CordovaPlugin implements PushConstants {
                     }
                 }
             });
-         } else if (GETTAGS.equals(action)) {
+        } else if (REMOVETAGS.equals(action)) {
+            cordova.getThreadPool().execute(new Runnable() {
+                public void run() {
+                    try {
+                        List<String> tags = Collections.synchronizedList(new ArrayList<String>());
+                        JSONArray tagsJSON;
+
+                        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(COM_ADOBE_PHONEGAP_PUSH, Context.MODE_PRIVATE);
+
+                        notificationHubPath = data.getJSONObject(0).getString(NOTIFICATION_HUB_PATH);
+                        connectionString = data.getJSONObject(0).getString(CONNECTION_STRING);
+                        tagsJSON = data.getJSONObject(0).getJSONArray(TAGS);
+                        
+
+                        if (tagsJSON != null) {
+                          int len = tagsJSON.length();
+                          for (int i=0;i<len;i++){
+                            tags.add(tagsJSON.get(i).toString());
+                          }
+                        }
+
+                        String token = FirebaseInstanceId.getInstance().getToken();
+
+                        String senderID = getStringResourceByName(GCM_DEFAULT_SENDER_ID);
+
+                        if (token == null) {
+                          token = FirebaseInstanceId.getInstance().getToken(senderID,FCM);
+                        }
+
+                        //NotificationHub hub = new NotificationHub(notificationHubPath, connectionString, getApplicationContext());
+                        //hub.register(token,tags);
+
+                        NotificationHub.start(getApplication(),notificationHubPath, connectionString);
+                        if (NotificationHub.removeTags(tags)) {
+                            Log.v(LOG_TAG, "REMOVETAGS was successfull called and executed");
+                            callbackContext.success();
+                        } else {
+                            Log.v(LOG_TAG, "REMOVETAGS failed");
+                            callbackContext.error("removeTags failed with response 'false'");
+                        }
+                        Log.v(LOG_TAG, "REMOVETAGS");
+
+                        callbackContext.success();
+                    } catch (IOException e) {
+                        Log.e(LOG_TAG, "execute: Got JSON Exception " + e.getMessage());
+                        callbackContext.error(e.getMessage());
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, "execute: Got General Exception " + e.getMessage());
+                        callbackContext.error(e.getMessage());
+                    }
+                }
+            });
+        } else if (GETTAGS.equals(action)) {
             cordova.getThreadPool().execute(new Runnable() {
                 public void run() {
                     try {

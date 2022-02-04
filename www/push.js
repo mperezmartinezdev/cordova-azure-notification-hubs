@@ -185,6 +185,36 @@ PushNotification.prototype.removeTag = function (
   ]);
 };
 
+PushNotification.prototype.removeTags = function (
+  successCallback,
+  errorCallback,
+  options
+) {
+  console.log('trigger: removeTags');
+
+  if (!errorCallback) {
+    errorCallback = function () {};
+  }
+
+  if (typeof errorCallback !== 'function') {
+    console.log(
+      'PushNotification.removeTags failure: failure parameter not a function'
+    );
+    return;
+  }
+
+  if (typeof successCallback !== 'function') {
+    console.log(
+      'PushNotification.removeTags failure: success callback parameter must be a function'
+    );
+    return;
+  }
+
+  exec(successCallback, errorCallback, 'PushNotification', 'removeTags', [
+    options,
+  ]);
+};
+
 PushNotification.prototype.getTags = function (
   successCallback,
   errorCallback,

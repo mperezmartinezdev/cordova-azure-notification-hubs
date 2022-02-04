@@ -50,6 +50,7 @@ public interface PushConstants {
     public static final String UNREGISTER = "unregister";
     public static final String ADDTAGS = "addTags";
     public static final String REMOVETAG = "removeTag";
+    public static final String REMOVETAGS = "removeTags";
     public static final String GETTAGS = "getTags";
     public static final String EXIT = "exit";
     public static final String FINISH = "finish";
