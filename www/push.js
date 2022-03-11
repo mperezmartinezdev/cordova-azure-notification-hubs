@@ -486,5 +486,5 @@ module.exports = {
    * .init helper method.
    */
 
-  PushNotificationSchema: PushNotification,
+  PushNotification: PushNotification,
 };
