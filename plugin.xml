@@ -29,12 +29,12 @@
 		<uses-library android:name="org.apache.http.legacy" android:required="false" />
       <activity android:name="com.adobe.phonegap.push.PushHandlerActivity" android:exported="true" android:permission="${applicationId}.permission.PushHandlerActivity"/>
       <receiver android:name="com.adobe.phonegap.push.BackgroundActionButtonHandler"/>
-      <service android:name="com.adobe.phonegap.push.FCMService">
+      <service android:name="com.adobe.phonegap.push.FCMService" android:exported="true">
         <intent-filter>
           <action android:name="com.google.firebase.MESSAGING_EVENT"/>
         </intent-filter>
       </service>
-      <service android:name="com.adobe.phonegap.push.PushInstanceIDListenerService">
+      <service android:name="com.adobe.phonegap.push.PushInstanceIDListenerService" android:exported="true">
         <intent-filter>
           <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
         </intent-filter>
@@ -44,7 +44,7 @@
     <framework src="me.leolin:ShortcutBadger:1.1.21@aar"/>
     <framework src="com.google.firebase:firebase-messaging:17.0.+"/>
     <framework src="com.microsoft.azure:notification-hubs-android-sdk:1.1.+"/>
-    <dependency id="cordova-support-google-services" version="~1.2.0"/>
+    <!-- <dependency id="cordova-support-google-services" version="~1.2.0"/> -->
     <dependency id="phonegap-plugin-multidex" version="~1.0.0"/>
     <source-file src="src/android/com/adobe/phonegap/push/FCMService.java" target-dir="src/com/adobe/phonegap/push/"/>
     <source-file src="src/android/com/adobe/phonegap/push/PushConstants.java" target-dir="src/com/adobe/phonegap/push/"/>
